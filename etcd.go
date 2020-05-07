@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/coreos/etcd/clientv3"
 	"github.com/coreos/etcd/clientv3/concurrency"
-	"path/filepath"
+	"path"
 )
 
 type etcdSession struct {
@@ -14,12 +14,12 @@ type etcdSession struct {
 }
 
 func (this *etcdSession) NewMutex(key string) Mutex {
-	var path = filepath.Join("/", this.prefix, key)
+	var nPath = path.Join("/", this.prefix, key)
 	var session, err = concurrency.NewSession(this.client, this.opts...)
 	var mu = &etcdMutex{}
 	mu.err = err
 	mu.session = session
-	mu.mu = concurrency.NewMutex(session, path)
+	mu.mu = concurrency.NewMutex(session, nPath)
 	return mu
 }
 
