@@ -8,25 +8,24 @@ import (
 )
 
 type etcdSession struct {
+	prefix string
 	client *clientv3.Client
 	opts   []concurrency.SessionOption
 }
 
 func (this *etcdSession) NewMutex(key string) Mutex {
-	key = filepath.Clean("/" + key + "/")
-
-	session, err := concurrency.NewSession(this.client, this.opts...)
-
+	var path = filepath.Join("/", this.prefix, key)
+	var session, err = concurrency.NewSession(this.client, this.opts...)
 	var mu = &etcdMutex{}
 	mu.err = err
 	mu.session = session
-	mu.mu = concurrency.NewMutex(session, key)
-
+	mu.mu = concurrency.NewMutex(session, path)
 	return mu
 }
 
-func NewSessionWithETCD(client *clientv3.Client, opts ...concurrency.SessionOption) Session {
+func NewSessionWithETCD(prefix string, client *clientv3.Client, opts ...concurrency.SessionOption) Session {
 	var s = &etcdSession{}
+	s.prefix = prefix
 	s.client = client
 	s.opts = opts
 	return s
@@ -43,17 +42,20 @@ func (this *etcdMutex) Lock() error {
 		return this.err
 	}
 	var err = this.mu.Lock(context.TODO())
-	if err != nil {
+
+	if err != nil && this.session != nil {
 		this.session.Close()
 	}
 	return err
 }
 
 func (this *etcdMutex) Unlock() error {
-	if this.err != nil {
-		return this.err
+	var err error
+	if this.mu != nil {
+		err = this.mu.Unlock(context.TODO())
 	}
-
-	defer this.session.Close()
-	return this.mu.Unlock(context.TODO())
+	if this.session != nil {
+		this.session.Close()
+	}
+	return err
 }

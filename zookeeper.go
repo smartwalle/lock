@@ -6,18 +6,20 @@ import (
 )
 
 type zookeeperSession struct {
-	conn *zk.Conn
-	acl  []zk.ACL
+	prefix string
+	conn   *zk.Conn
+	acl    []zk.ACL
 }
 
 func (this *zookeeperSession) NewMutex(key string) Mutex {
-	key = filepath.Clean("/" + key)
-	return zk.NewLock(this.conn, key, this.acl)
+	var path = filepath.Join("/", this.prefix, key)
+	return zk.NewLock(this.conn, path, this.acl)
 }
 
-func NewSessionWithZookeeper(c *zk.Conn, acl []zk.ACL) Session {
+func NewSessionWithZookeeper(prefix string, conn *zk.Conn, acl []zk.ACL) Session {
 	var s = &zookeeperSession{}
-	s.conn = c
+	s.prefix = prefix
+	s.conn = conn
 	s.acl = acl
 	return s
 }
