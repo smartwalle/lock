@@ -1,4 +1,4 @@
-module github.com/smartwalle/lock4go
+module github.com/smartwalle/lock
 
 go 1.13
 

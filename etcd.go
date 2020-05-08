@@ -1,4 +1,4 @@
-package lock4go
+package lock
 
 import (
 	"context"
@@ -14,7 +14,7 @@ type etcdSession struct {
 }
 
 func (this *etcdSession) NewMutex(key string) Mutex {
-	var nPath = path.Join("/", this.prefix, key)
+	var nPath = path.Join(kPrefix, this.prefix, key)
 	var session, err = concurrency.NewSession(this.client, this.opts...)
 	var mu = &etcdMutex{}
 	mu.err = err
@@ -23,7 +23,7 @@ func (this *etcdSession) NewMutex(key string) Mutex {
 	return mu
 }
 
-func NewSessionWithETCD(prefix string, client *clientv3.Client, opts ...concurrency.SessionOption) Session {
+func NewETCDSession(prefix string, client *clientv3.Client, opts ...concurrency.SessionOption) Session {
 	var s = &etcdSession{}
 	s.prefix = prefix
 	s.client = client

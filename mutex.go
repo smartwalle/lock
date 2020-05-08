@@ -1,4 +1,4 @@
-package lock4go
+package lock
 
 type Mutex interface {
 	Lock() error
