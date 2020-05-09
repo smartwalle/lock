@@ -8,13 +8,13 @@ import (
 )
 
 type etcdSession struct {
-	prefix string
+	key    string
 	client *clientv3.Client
 	opts   []concurrency.SessionOption
 }
 
 func (this *etcdSession) NewMutex(key string) Mutex {
-	var nPath = path.Join(kPrefix, this.prefix, key)
+	var nPath = path.Join(kPrefix, this.key, key)
 	var session, err = concurrency.NewSession(this.client, this.opts...)
 	var mu = &etcdMutex{}
 	mu.err = err
@@ -23,9 +23,9 @@ func (this *etcdSession) NewMutex(key string) Mutex {
 	return mu
 }
 
-func NewETCDSession(prefix string, client *clientv3.Client, opts ...concurrency.SessionOption) Session {
+func NewETCDSession(key string, client *clientv3.Client, opts ...concurrency.SessionOption) Session {
 	var s = &etcdSession{}
-	s.prefix = prefix
+	s.key = key
 	s.client = client
 	s.opts = opts
 	return s
