@@ -1,0 +1,4 @@
+github.com/samuel/go-zookeeper v0.0.0-20190923202752-2cc03de413da h1:p3Vo3i64TCLY7gIfzeQaUJ+kppEO5WQG3cL8iE8tGHU=
+github.com/samuel/go-zookeeper v0.0.0-20190923202752-2cc03de413da/go.mod h1:gi+0XIa01GRL2eRQVjQkKGqKF3SF9vZR/HnPullcV2E=
+github.com/smartwalle/lock v0.0.2 h1:nk1Jqyss16GCwea0WU/P5aJDPDi5PO6nmlMAsK+IO1E=
+github.com/smartwalle/lock v0.0.2/go.mod h1:NQGdBj0V4rO1fUjv23hD2ieRfULCyJKSDR38l2z2OV0=
