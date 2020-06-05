@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	kPrefix = "/lock/"
+	kPrefix = "lock"
 )
 
 type etcdSession struct {
