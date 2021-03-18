@@ -2,9 +2,9 @@ package etcd
 
 import (
 	"context"
-	"github.com/coreos/etcd/clientv3"
-	"github.com/coreos/etcd/clientv3/concurrency"
 	"github.com/smartwalle/lock"
+	"go.etcd.io/etcd/client/v3"
+	"go.etcd.io/etcd/client/v3/concurrency"
 	"path"
 )
 
